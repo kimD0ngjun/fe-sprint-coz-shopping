@@ -19,7 +19,7 @@ export default function Header() {
             COZ shopping
           </span>
         </div>
-        <div>
+        <div className="relative">
           <img src={menu} alt="menu" onClick={toggleMenu} />
           {isMenuOpen && <HeaderMenu />}
         </div>
