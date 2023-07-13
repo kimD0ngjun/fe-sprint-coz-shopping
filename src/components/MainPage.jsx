@@ -2,7 +2,7 @@ import React from "react";
 import MainGoods from "./MainGoods";
 import MainBookmark from "./MainBookmark";
 
-export default function MainPage({ isData }) {
+export default function MainPage({ isData, setIsData }) {
   return (
     <>
       <main>
@@ -13,7 +13,7 @@ export default function MainPage({ isData }) {
           {isData &&
             isData.slice(0, 4).map((el, index) => (
               <li key={index}>
-                <MainGoods data={el} />
+                <MainGoods item={el} isData={isData} setIsData={setIsData} />
               </li>
             ))}
         </ul>

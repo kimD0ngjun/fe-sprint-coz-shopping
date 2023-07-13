@@ -19,7 +19,16 @@ function App() {
         //어떻게 쓸까?
         //isData에 저장
         //console.log(res)로 확인해보면 data확인 가능
-        .then((res) => setIsData(res.data))
+        .then((res) => {
+          let resArr = res.data;
+          resArr = resArr.map((el) => {
+            return { ...el, isBookmarked: false };
+          });
+          setIsData(resArr);
+          console.log(resArr);
+          // res.data 객체에 북마크 확인 키값 추가
+        })
+        //객체분해할당이든 Object.assign()
         //에러가 나면?
         .catch((err) => console.log(err))
     );
@@ -32,10 +41,14 @@ function App() {
     getData();
   }, []);
 
+  // 1. 객체에 BOOKMARKED : null 관련 키를 추가
+  // 2. useEffect => 초기값(null) => 저장 안됨
+  // 3. 저장 안되는 문제 => 로컬스토리지?
+
   return (
     <div className="App">
       <Header />
-      <MainPage isData={isData} />
+      <MainPage isData={isData} setIsData={setIsData} />
       <Footer />
     </div>
   );
