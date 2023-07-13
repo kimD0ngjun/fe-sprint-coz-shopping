@@ -12,7 +12,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="flex justify-around shadow-xl sticky top-0 w-screen h-20 items-center">
+      <header className="flex justify-around shadow-xl sticky top-0 w-screen h-20 items-center space-x-36">
         <div className="flex items-center">
           <img src={logo} alt="logo" />
           <span className="font-inter font-extrabold text-3xl ml-4 mt-1.5">
