@@ -1,8 +1,11 @@
 import React from "react";
 import MainGoods from "./MainGoods";
 import MainBookmark from "./MainBookmark";
+import { useSelector } from "react-redux";
 
-export default function MainPage({ isData, setIsData }) {
+export default function MainPage() {
+  const allProducts = useSelector((state) => state.AllProducts.value);
+
   return (
     <>
       <main>
@@ -10,12 +13,11 @@ export default function MainPage({ isData, setIsData }) {
           상품 리스트
         </div>
         <ul className="flex justify-center space-x-4">
-          {isData &&
-            isData.slice(0, 4).map((el, index) => (
-              <li key={index}>
-                <MainGoods item={el} isData={isData} setIsData={setIsData} />
-              </li>
-            ))}
+          {allProducts.length > 0
+            ? allProducts
+                .slice(0, 4)
+                .map((el) => <MainGoods key={el.id} item={el} />)
+            : null}
         </ul>
       </main>
       <MainBookmark />

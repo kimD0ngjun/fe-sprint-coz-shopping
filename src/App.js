@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { updateAllProducts } from "./features/AllProductsSlice";
+// 프롭스 드릴링 없이 곧바로 import
 import "./App.css";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer";
@@ -6,9 +9,10 @@ import MainPage from "./components/MainPage";
 import axios from "axios";
 
 function App() {
-  // 2. api get요청 후 받아온 데이터를 저장해두려고
+  // 2. api get요청 후 받아 온 데이터를 저장해두려고
   // + 활용하기 위해 useState 사용
-  const [isData, setIsData] = useState(null);
+  // const [isData, setIsData] = useState(null); => 리덕스로 이미 구현했으니 필요 x
+  const dispatch = useDispatch();
 
   // 3. 조회한 데이터를 활용하기 위해 getData 함수에 담았다
   const getData = () => {
@@ -16,16 +20,11 @@ function App() {
     return (
       axios
         .get("http://cozshopping.codestates-seb.link/api/v1/products")
-        //어떻게 쓸까?
-        //isData에 저장
-        //console.log(res)로 확인해보면 data확인 가능
         .then((res) => {
-          let resArr = res.data;
-          resArr = resArr.map((el) => {
-            return { ...el, isBookmarked: false };
-          });
-          setIsData(resArr);
-          console.log(resArr);
+          dispatch(updateAllProducts(res.data));
+          // dispatch 안에 들어가는 콜백함수 : 액션 전송을 위해서
+          // setIsData(resArr); => 리덕스 툴킷 쓴 이상 얘는 필요 x
+          // console.log(resArr);
           // res.data 객체에 북마크 확인 키값 추가
         })
         //객체분해할당이든 Object.assign()
@@ -48,7 +47,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <MainPage isData={isData} setIsData={setIsData} />
+      <MainPage />
       <Footer />
     </div>
   );
