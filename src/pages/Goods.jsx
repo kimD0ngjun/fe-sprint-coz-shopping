@@ -3,13 +3,21 @@ import GoodsFilter from "../components/GoodsFilter";
 import MainGoods from "../components/MainGoods";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { updateGoodsFilter } from "../features/CurrentFilter";
 
 export default function Goods() {
   const data = useSelector((state) => state.AllProducts.value);
   const filterTab = useSelector((state) => state.CurrentFilter.value.Goods);
-  const filterList =
-    filterTab === "All" ? data : data.filter((el) => el.type === filterTab);
+  const dispatch = useDispatch();
+
+  // 선택된 탭에 해당하는 상품만 필터링
+  const filterList = data.filter((el) => {
+    if (filterTab === "All") {
+      return true;
+    }
+    return el.type === filterTab;
+  });
 
   const [page, setPage] = useState(12);
   const filterListPage = filterList.slice(0, page);
@@ -35,10 +43,15 @@ export default function Goods() {
     setPage(12);
   }, [pathName]);
 
+  const updateFilterTab = (tab) => {
+    dispatch(updateGoodsFilter(tab)); // 선택된 탭 업데이트
+    setPage(12); // 페이지 초기화
+  };
+
   return (
     <>
       <main>
-        <GoodsFilter />
+        <GoodsFilter activeTab={filterTab} onTabClick={updateFilterTab} />
         <div>
           {filterListPage.map((el, idx) => (
             <MainGoods key={idx} item={el} />
