@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { updateAllProducts } from "./features/AllProductsSlice";
+import { updateLoading } from "./features/Loading";
 // 프롭스 드릴링 없이 곧바로 import
 import "./App.css";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer";
-import MainPage from "./components/MainPage";
+import MainPage from "./pages/MainPage";
+import Goods from "./pages/Goods";
 import axios from "axios";
 
 function App() {
@@ -13,6 +16,8 @@ function App() {
   // + 활용하기 위해 useState 사용
   // const [isData, setIsData] = useState(null); => 리덕스로 이미 구현했으니 필요 x
   const dispatch = useDispatch();
+
+  const isLoading = useSelector((state) => state.Loading.value);
 
   // 3. 조회한 데이터를 활용하기 위해 getData 함수에 담았다
   const getData = () => {
@@ -26,6 +31,7 @@ function App() {
           // setIsData(resArr); => 리덕스 툴킷 쓴 이상 얘는 필요 x
           // console.log(resArr);
           // res.data 객체에 북마크 확인 키값 추가
+          dispatch(updateLoading(!isLoading));
         })
         //객체분해할당이든 Object.assign()
         //에러가 나면?
@@ -45,12 +51,21 @@ function App() {
   // 3. 저장 안되는 문제 => 로컬스토리지?
 
   return (
-    <div className="App">
-      <Header />
-      <MainPage />
-      <Footer />
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <Header />
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/goods/list" element={<Goods />} />
+        </Routes>
+        <Footer />
+      </div>
+    </BrowserRouter>
   );
 }
 
 export default App;
+
+// useDispatch : 업데이트 목적
+// useSelector : 스토어에서 가져오기 위한 목적
+//
